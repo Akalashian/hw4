@@ -1,13 +1,13 @@
 // KIEI-924 Spring 2018 Homework #4
 // React Native Weather
 
-// Functionality-wise, essentially the same as the jQuery weather application built in 
+// Functionality-wise, essentially the same as the jQuery weather application built in
 // Project #2, without the fade effects, but on mobile!
 
 // HINTS
 // - Built-in "icon" function transforms a Dark Sky icon name into a Font Awesome
-//   icon (yup, Font Awesome works on mobile too, thanks to this awesome open-source 
-//   project - https://github.com/oblador/react-native-vector-icons)
+//   icon (yup, Font Awesome works on mobile too, thanks to this awesome open-source
+  //   project - https://github.com/oblador/react-native-vector-icons)
 // - You use the Font Awesome icon by utilizing the Icon component, like this:
 //   <Icon name="rocket" size={100} color="#000" />. The Icon should live inside a Text
 //   component.
@@ -17,10 +17,10 @@
 //   note that the Icon component is inside parentheses
 // - Math.round(50.85) => 50
 // - For the forecast, use the high temperatures only
-// - Make life easier by storing the entirety of the .daily.data array that comes back 
+// - Make life easier by storing the entirety of the .daily.data array that comes back
 //   from Dark Sky in this.state.forecast, instead of trying to store away the individual
 //   bits and pieces of information
-// - There are styles already written for each component. Use them by adding a "style" 
+// - There are styles already written for each component. Use them by adding a "style"
 //   attribute to each component, e.g. <Text style={styles.currentTemperature}>. See the
 //   styles.js file for the definition of each style.
 // - You'll receive another warning message when looping through the days of the forecast,
@@ -57,7 +57,7 @@ export default class App extends React.Component {
       locationInputText: text
     });
   }
-  
+
   async getWeather() {
     // Event handler for clicking of the "Get weather!" button
     // Calls the geocoding and weather API, get back a location and weather object
@@ -65,20 +65,37 @@ export default class App extends React.Component {
 
     console.log(response.location);
     console.log(response.weather);
+    console.log(response.weather.currently.icon);
+    console.log(response.weather.currently.summary);
+    console.log(response.weather.currently.temperature);
 
     // manipulate state
     this.setState({
-      locationName: response.location
+      locationName: response.location,
+      currentTemperature:response.weather.currently.temperature,
+      currentSummary:response.weather.currently.summary,
+      currentIcon:response.weather.currently.icon,
+      forecast:response.daily
     });
   }
 
   render() {
+    <Text> <Icon name="rocket" size={100} color="#000" /> </Text>
+
     // Three Views inside the parent view
     // 1. TextInput and Button for city name and to call getWeather()
     // 2. Current weather conditions (styles provided with currentIcon, locationText,
     //    currentTemperature, currentSummary)
     // 3. Forecast (forecastDay, forecastIcon, forecastTemperature)
     let forecast = []; // this will eventually hold the JSX elements for each day
+    for(let i=0; i<5; i++){
+    let forecastWeather =
+      <Text style={styles.forecast.data[i].icon}><Icon size={30} name={icon(this.state.forecast.data[i].icon)} /></Text>
+      <Text style={styles.forecast.data[i].temperatureHigh}>{Math.round(this.state.forecast.data[i].temperatureHigh)}</Text>
+      forecast.push(forecastWeather)
+    }
+
+
 
     return (
       <View style={styles.container}>
@@ -88,7 +105,10 @@ export default class App extends React.Component {
         </View>
         <View style={styles.currentWeather}>
           {/* Current weather conditions */}
+          <Text style={styles.currenttIcon}><Icon size={100} name={icon(this.state.currentIcon)} /></Text>
           <Text style={styles.locationText}>{this.state.locationName}</Text>
+          <Text style={styles.currentTemperature}>{Math.round(this.state.currentTemperature)}</Text>
+          <Text style={styles.currentSummary}>{this.state.currentSummary}</Text>
         </View>
         <View style={styles.forecast}>
           {forecast}
