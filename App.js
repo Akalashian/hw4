@@ -75,12 +75,12 @@ export default class App extends React.Component {
       currentTemperature:response.weather.currently.temperature,
       currentSummary:response.weather.currently.summary,
       currentIcon:response.weather.currently.icon,
-      forecast:response.daily
+      forecast:response.weather.daily.data
     });
   }
 
   render() {
-    <Text> <Icon name="rocket" size={100} color="#000" /> </Text>
+    // <Text> <Icon name="rocket" size={100} color="#000" /> </Text>
 
     // Three Views inside the parent view
     // 1. TextInput and Button for city name and to call getWeather()
@@ -89,10 +89,12 @@ export default class App extends React.Component {
     // 3. Forecast (forecastDay, forecastIcon, forecastTemperature)
     let forecast = []; // this will eventually hold the JSX elements for each day
     for(let i=0; i<5; i++){
-    let forecastWeather =
-      <Text style={styles.forecast.data[i].icon}><Icon size={30} name={icon(this.state.forecast.data[i].icon)} /></Text>
-      <Text style={styles.forecast.data[i].temperatureHigh}>{Math.round(this.state.forecast.data[i].temperatureHigh)}</Text>
-      forecast.push(forecastWeather)
+      forecast.push(
+      <View style = {styles.forecastDay} key ={i}>
+        <Text style={styles.forecastIcon}>{this.state.forecast[i] && (<Icon size ={30} name={icon(this.state.forecast[i].icon)} />)} </Text>
+        <Text> {this.state.forecast[i] && (<Text style ={styles.forecastTemperature}>{Math.round(this.state.forecast[i].temperatureHigh)}</Text>)}</Text>
+        </View>
+      )
     }
 
 
@@ -105,7 +107,7 @@ export default class App extends React.Component {
         </View>
         <View style={styles.currentWeather}>
           {/* Current weather conditions */}
-          <Text style={styles.currenttIcon}><Icon size={100} name={icon(this.state.currentIcon)} /></Text>
+          <Text style={styles.currentIcon}><Icon size={100} name={icon(this.state.currentIcon)} /></Text>
           <Text style={styles.locationText}>{this.state.locationName}</Text>
           <Text style={styles.currentTemperature}>{Math.round(this.state.currentTemperature)}</Text>
           <Text style={styles.currentSummary}>{this.state.currentSummary}</Text>
